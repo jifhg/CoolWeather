@@ -3,7 +3,9 @@ package com.example.admin.myapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -14,25 +16,46 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class Main2Activity extends AppCompatActivity {
-    private String[] data={"北京","浙江","温州"};
+    private List<String> data2=new ArrayList();
+    private int[] pids=new int[100];
+    private String[] data ={"北京","浙江","温州","北京","浙江","温州","北京","浙江","温州","北京","浙江","温州"};
     private TextView textView;
     private ListView listview;
 
-//    private Button button;
+
+
+    //    private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         this.textView=(TextView) findViewById(R.id.abcd);
         this.listview=(ListView) findViewById(R.id.listview);
+
         ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,data);
         listview.setAdapter(adapter);
+
+        this.listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("点击了哪一个",""+position +":"+Main2Activity.this.pids[position]+":"+Main2Activity.this.data[position]);
+
+                Intent intent= new Intent(Main2Activity.this,MainActivity.class);
+                intent.putExtra("pid",Main2Activity.this.pids[position]);
+                startActivity(intent);
+            }
+        });
+
+
+
 
 //        this.button = (Button)findViewById(R.id.button1);
 //        this.button.setOnClickListener(new View.OnClickListener() {
@@ -63,28 +86,28 @@ public class Main2Activity extends AppCompatActivity {
         });
     }
     private String[] parseJSONObject(String responseText){
-        JSONArray jsonArray= null;
-        try{
-            jsonArray=new JSONArray(responseText);
+            JSONArray jsonArray= null;
+            try{
+                jsonArray=new JSONArray(responseText);
 
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        String[] result = new String[jsonArray.length()];
-        for (int i = 0;i < jsonArray.length();i++){
-            JSONObject jsonObject= null;
-            try {
-                jsonObject=jsonArray.getJSONObject(i);
             }catch (JSONException e){
                 e.printStackTrace();
             }
-           try {
-                result[i] = jsonObject.getString("name");
-           }catch (JSONException e){
-                e.printStackTrace();
-           }
-        }
-        return null;
+            String[] result = new String[jsonArray.length()];
+            for (int i = 0;i < jsonArray.length();i++){
+                JSONObject jsonObject= null;
+                try {
+                    jsonObject=jsonArray.getJSONObject(i);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                try {
+                    result[i] = jsonObject.getString("name");
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            return null;
 
     }
 }
