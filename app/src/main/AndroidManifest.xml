@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CountryActivity" />
+
         <activity android:name=".WeatherActivity"></activity>
     </application>
 
